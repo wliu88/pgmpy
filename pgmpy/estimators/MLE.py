@@ -68,9 +68,8 @@ class MaximumLikelihoodEstimator(BaseEstimator):
             else:
                 parent_card = np.array([self.node_card[parent] for parent in parents])
                 var_card = self.node_card[node]
-                state_counts = self.data.groupby([node] + self.model.predecessors(node)).count()
-                values = state_counts.iloc[:, 0].reshape(var_card,
-                                                         np.product(parent_card))
+                state_counts = self.data.groupby([node] + self.model.predecessors(node)).size()
+                values = state_counts.values.reshape(var_card, np.product(parent_card))
                 cpd = TabularCPD(node, var_card, values,
                                  evidence=parents,
                                  evidence_card=parent_card.astype('int'))
