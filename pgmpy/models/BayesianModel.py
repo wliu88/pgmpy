@@ -548,11 +548,10 @@ class BayesianModel(DirectedGraph):
 
         if estimator_type is None:
             estimator_type = MaximumLikelihoodEstimator
-        else:
-            if not isinstance(estimator_type, BaseEstimator):
-                raise TypeError("Estimator object should be a valid pgmpy estimator.")
 
         estimator = estimator_type(self, data)
+        if not isinstance(estimator, BaseEstimator):
+            raise TypeError("Estimator object should be a valid pgmpy estimator.")
 
         cpds_list = estimator.get_parameters()
         self.add_cpds(*cpds_list)
