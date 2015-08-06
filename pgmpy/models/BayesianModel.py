@@ -555,6 +555,10 @@ class BayesianModel(DirectedGraph):
         if not isinstance(estimator, BaseEstimator):
             raise TypeError("Estimator object should be a valid pgmpy estimator.")
 
+        if not self.nodes():
+            nodes, edges = estimators.get_model()
+            self.add_nodes_from(nodes)
+            self.add_edges_from(edges)
         cpds_list = estimator.get_parameters()
         self.add_cpds(*cpds_list)
 
