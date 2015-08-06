@@ -90,7 +90,7 @@ class MaximumLikelihoodEstimator(BaseEstimator):
             f_exp = self.data.groupby([u, v]).size().values
             u_f_obs = self.data.ix[:, u].value_counts().values
             v_f_obs = self.data.ix[:, v].value_counts().values
-            if stats.chisquare(f_obs=[i * j for i in u_f_obs for j in v_f_obs], f_exp=f_exp) < threshold:
+            if stats.chisquare(f_obs=[i * j for i in u_f_obs for j in v_f_obs], f_exp=f_exp).pvalue < threshold:
                 edges.append((u, v))
 
         self.model.add_edges_from(edges)
