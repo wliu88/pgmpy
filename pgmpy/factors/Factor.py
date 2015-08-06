@@ -608,7 +608,7 @@ def _bivar_factor_operation(phi1, phi2, operation, n_jobs=1):
                     try:
                         values.append(phi1.values[np.sum(index[phi1_indexes] * phi1_cumprod)] /
                                       phi2.values[np.sum(index[phi2_indexes] * phi2_cumprod)])
-                    except Exceptions.InvalidValueError:
+                    except (Exceptions.InvalidValueError, FloatingPointError):
                         # zero division error should return 0 if both operands
                         # equal to 0. Ref Koller page 365, Fig 10.7
                         values.append(0)

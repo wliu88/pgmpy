@@ -514,7 +514,7 @@ class BayesianModel(DirectedGraph):
         mm = self.to_markov_model()
         return mm.to_junction_tree()
 
-    def fit(self, data, estimator_type=None):
+    def fit(self, data, estimator=None):
         """
         Computes the CPD for each node from a given data in the form of a pandas dataframe.
 
@@ -544,10 +544,12 @@ class BayesianModel(DirectedGraph):
          <pgmpy.factors.CPD.TabularCPD at 0x7fd173b2e2e8>]
         """
 
-        from pgmpy.estimators import MaximumLikelihoodEstimator, BaseEstimator
+        from pgmpy.estimators import MaximumLikelihoodEstimator, BaseEstimator, BayesianEstimator
 
-        if estimator_type is None:
+        if estimator is None or estimator == 'mle':
             estimator_type = MaximumLikelihoodEstimator
+        elif estimator == 'bayes':
+            estimator_type = BayesianEstimator
 
         estimator = estimator_type(self, data)
         if not isinstance(estimator, BaseEstimator):

@@ -86,7 +86,7 @@ class BayesianEstimator(BaseEstimator):
                 else:
                     parent_card = np.array([self.node_card[parent] for parent in parents])
                     var_card = self.node_card[node]
-                    state_counts = self.data.groupby([node] + self.model.predecessors(node)).count()
+                    state_counts = (self.data.groupby([node] + self.model.predecessors(node)).size()).values
                     node_alpha = np.array(alpha[node])
 
                     values = (state_counts.values + node_alpha) / (state_counts.values.sum() + node_alpha.sum())
