@@ -84,12 +84,12 @@ class MaximumLikelihoodEstimator(BaseEstimator):
 
     def get_model(self, threshold):
         nodes = self.data.columns
-        self.model.add_nodes_from(nodes)
+        edges = []
         for u, v in combinations(nodes, 2):
             f_exp = self.data.groupby([u, v]).size().values
             u_f_obs = self.data.ix[:, u].value_counts().values
             v_f_obs = self.data.ix[:, v].value_counts().values
             if stats.chisquare(f_obs=[i * j for i in u_f_obs for j in v_f_obs], f_exp=f_exp) < threshold:
-                self.model.add_edge(u, v)
+                edges.append((u, v))
 
-        return self.model
+        return nodes, edges
