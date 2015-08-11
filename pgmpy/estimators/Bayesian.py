@@ -127,4 +127,3 @@ class BayesianEstimator(BaseEstimator):
 
     def get_model(self, data, prior=None):
         nodes = self.data.columns
-        
