@@ -102,12 +102,22 @@ class BayesianEstimator(BaseEstimator):
 
         return parameters
 
-    def _count(self, data, states):
+    def _count(self, states):
+        data = self.data.copy()
         for var, state in states:
             data = data[data.ix[:, var] == state]
         return len(data)
 
-    def _model_score(self, data, model, prior=None):
+    def _alpha(self, node, prior, j=None):
+        if j:
+            return prior[node][j]
+        else:
+            alpha = 0
+            for j in range(self.node_card[node]):
+                alpha += sum(prior[node])
+            return alpha
+
+    def _model_score(self, model, prior=None):
         # score = log P(D | G) + log P(G)
         score = 0
         for node in model.nodes():
@@ -116,11 +126,12 @@ class BayesianEstimator(BaseEstimator):
             outer_sum = 0
             for states in product(*[range(card) for card in parents_card]):
                 u_i = [(parents[i], states[i]) for i in range(len(parents))]
-                value = lgamma(alpha) - lgamma(alpha + _count(data, u_i))
+                value = (lgamma(self._alpha(node, prior)) -
+                         lgamma(self._alpha(node, prior) + self._count(u_i)))
                 node_sum = 0
-                for x_i in len(model.get_cardinality(node)):
-                    node_sum += (lgamma(alpha + _count(data, states.append((node, x_i)))) -
-                                 lgamma(alpha))
+                for x_i in range(model.get_cardinality(node)):
+                    node_sum += (lgamma(self._alpha(node, prior, x_i) + self._count(states.append((node, x_i)))) -
+                                 lgamma(self._alpha(node, prior, x_i)))
                 outer_sum += value * node_sum
             score += outer_sum
         return score
