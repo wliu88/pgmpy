@@ -1,3 +1,6 @@
+from itertools import product
+from math import lgamma
+
 import numpy as np
 from scipy import stats
 from scipy import integrate
@@ -98,3 +101,30 @@ class BayesianEstimator(BaseEstimator):
                     parameters.append(cpd)
 
         return parameters
+
+    def _count(self, data, states):
+        for var, state in states:
+            data = data[data.ix[:, var] == state]
+        return len(data)
+
+    def _model_score(self, data, model, prior=None):
+        # score = log P(D | G) + log P(G)
+        score = 0
+        for node in model.nodes():
+            parents = [u for u, v in model.edges() if v == node]
+            parents_card = list(model.get_cardinality(parents).values())
+            outer_sum = 0
+            for states in product(*[range(card) for card in parents_card]):
+                u_i = [(parents[i], states[i]) for i in range(len(parents))]
+                value = lgamma(alpha) - lgamma(alpha + _count(data, u_i))
+                node_sum = 0
+                for x_i in len(model.get_cardinality(node)):
+                    node_sum += (lgamma(alpha + _count(data, states.append((node, x_i)))) -
+                                 lgamma(alpha))
+                outer_sum += value * node_sum
+            score += outer_sum
+        return score
+
+    def get_model(self, data, prior=None):
+        nodes = self.data.columns
+        
