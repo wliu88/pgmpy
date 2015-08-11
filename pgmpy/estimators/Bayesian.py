@@ -1,4 +1,4 @@
-from itertools import product
+from itertools import product, combinations
 from math import lgamma
 
 import numpy as np
@@ -127,3 +127,17 @@ class BayesianEstimator(BaseEstimator):
 
     def get_model(self, data, prior=None):
         nodes = self.data.columns
+        max_score = -1000000
+        best_model = None
+        all_possible_edges = combinations(nodes, 2)
+        for r in range(1, len(all_possible_edges)):
+            for edges in combinations(all_possible_edges, r):
+                try:
+                    model = BayesianModel(edges)
+                except:
+                    continue
+                model_score = self._model_score(data, model)
+                if model_score > max_score:
+                    max_score = model_score
+                best_model = model
+        return best_model
