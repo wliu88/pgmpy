@@ -136,7 +136,7 @@ class BayesianEstimator(BaseEstimator):
             score += outer_sum
         return score
 
-    def get_model(self, data, prior=None):
+    def get_model(self, prior=None):
         nodes = self.data.columns
         max_score = -1000000
         best_model = None
@@ -147,7 +147,7 @@ class BayesianEstimator(BaseEstimator):
                     model = BayesianModel(edges)
                 except:
                     continue
-                model_score = self._model_score(data, model)
+                model_score = self._model_score(model, prior)
                 if model_score > max_score:
                     max_score = model_score
                 best_model = model
