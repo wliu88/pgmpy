@@ -550,6 +550,8 @@ class BayesianModel(DirectedGraph):
             estimator_type = MaximumLikelihoodEstimator
         elif estimator == 'bayes':
             estimator_type = BayesianEstimator
+        else:
+            estimator_type = estimator
 
         estimator = estimator_type(self, data)
         if not isinstance(estimator, BaseEstimator):

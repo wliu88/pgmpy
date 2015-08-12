@@ -122,7 +122,7 @@ class BayesianEstimator(BaseEstimator):
         score = 0
         for node in model.nodes():
             parents = [u for u, v in model.edges() if v == node]
-            parents_card = list(model.get_cardinality(parents).values())
+            parents_card = [self._node_card[par] for par in parents]
             outer_sum = 0
             for states in product(*[range(card) for card in parents_card]):
                 u_i = [(parents[i], states[i]) for i in range(len(parents))]
@@ -137,11 +137,12 @@ class BayesianEstimator(BaseEstimator):
         return score
 
     def get_model(self, prior=None):
+        import pdb; pdb.set_trace()
         nodes = self.data.columns
         max_score = -1000000
         best_model = None
-        all_possible_edges = combinations(nodes, 2)
-        for r in range(1, len(all_possible_edges)):
+        all_possible_edges = list(combinations(nodes, 2))
+        for r in range(1, len(all_possible_edges) + 1):
             for edges in combinations(all_possible_edges, r):
                 try:
                     model = BayesianModel(edges)
@@ -151,4 +152,4 @@ class BayesianEstimator(BaseEstimator):
                 if model_score > max_score:
                     max_score = model_score
                 best_model = model
-        return best_model
+        return best_model.nodes(), best_model.edges()
