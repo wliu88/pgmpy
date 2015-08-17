@@ -4,8 +4,8 @@ import numpy as np
 from scipy import stats
 
 from pgmpy.estimators import BaseEstimator
-from pgmpy.factors import TabularCPD
-from pgmpy.models import BayesianModel
+from pgmpy.factors import TabularCPD, Factor, factor_product
+from pgmpy.models import BayesianModel, MarkovModel
 
 
 class MaximumLikelihoodEstimator(BaseEstimator):
@@ -32,8 +32,8 @@ class MaximumLikelihoodEstimator(BaseEstimator):
     >>> estimator = MaximumLikelihoodEstimator(model, values)
     """
     def __init__(self, model, data):
-        if not isinstance(model, BayesianModel):
-            raise NotImplementedError("Maximum Likelihood Estimate is only implemented of BayesianModel")
+        # if not isinstance(model, BayesianModel):
+        #     raise NotImplementedError("Maximum Likelihood Estimate is only implemented of BayesianModel")
 
         super().__init__(model, data)
 
@@ -59,28 +59,53 @@ class MaximumLikelihoodEstimator(BaseEstimator):
         >>> estimator = MaximumLikelihoodEstimator(model, values)
         >>> estimator.get_parameters()
         """
-        parameters = []
+        if isinstance(self.model, BayesianModel):
+            parameters = []
 
-        for node in self.model.nodes():
-            parents = self.model.get_parents(node)
-            if not parents:
-                state_counts = self.data.ix[:, node].value_counts()
-                cpd = TabularCPD(node, self.node_card[node],
-                                 state_counts.values[:, np.newaxis])
-                cpd.normalize()
-                parameters.append(cpd)
-            else:
-                parent_card = np.array([self.node_card[parent] for parent in parents])
-                var_card = self.node_card[node]
-                state_counts = self.data.groupby([node] + self.model.predecessors(node)).size()
-                values = state_counts.values.reshape(var_card, np.product(parent_card))
-                cpd = TabularCPD(node, var_card, values,
-                                 evidence=parents,
-                                 evidence_card=parent_card.astype('int'))
-                cpd.normalize()
-                parameters.append(cpd)
+            for node in self.model.nodes():
+                parents = self.model.get_parents(node)
+                if not parents:
+                    state_counts = self.data.ix[:, node].value_counts()
+                    cpd = TabularCPD(node, self.node_card[node],
+                                     state_counts.values[:, np.newaxis])
+                    cpd.normalize()
+                    parameters.append(cpd)
+                else:
+                    parent_card = np.array([self.node_card[parent] for parent in parents])
+                    var_card = self.node_card[node]
+                    state_counts = self.data.groupby([node] + self.model.predecessors(node)).size()
+                    values = state_counts.values.reshape(var_card, np.product(parent_card))
+                    cpd = TabularCPD(node, var_card, values,
+                                     evidence=parents,
+                                     evidence_card=parent_card.astype('int'))
+                    cpd.normalize()
+                    parameters.append(cpd)
 
-        return parameters
+            return parameters
+
+        elif isinstance(self.model, MarkovModel):
+            edges = self.model.edges()
+            no_of_params = [self.node_card[u] * self.node_card[v] for u, v in edges]
+            constants = []
+            for u, v in edges:
+                value_counts = self.data.groupby([u, v]).size()
+                constants.extend(value_counts.values)
+            total_params = sum(no_of_params)
+            constants = np.array(constants)
+
+            no_of_params.insert(0, 0)
+            param_cumsum = np.cumsum(no_of_params)
+
+            def optimize_fun(params):
+                factors = []
+                for index in range(len(edges)):
+                    u, v = edges[index][0], edges[index][1]
+                    factors.append(Factor([u, v], [self.node_card[u], self.node_card[v]],
+                                          params[param_cumsum[index]: param_cumsum[index + 1]]))
+                Z = factor_product(*factors)
+                return Z - constants * params
+
+
 
     def get_model(self, threshold=0.95):
         nodes = self.data.columns
