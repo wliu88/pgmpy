@@ -649,3 +649,21 @@ class MarkovModel(UndirectedGraph):
             raise ValueError('Factor for all the random variables not defined.')
 
         return np.sum(factor.values)
+
+    def fit(self, data, estimator=None):
+        from pgmpy.estimators import MaximumLikelihoodEstimator, BaseEstimator, BayesianEstimator
+
+        if estimator is None or estimator == 'mle':
+            estimator_type = MaximumLikelihoodEstimator
+        elif estimator == 'bayes':
+            estimator_type = BayesianEstimator
+        else:
+            estimator_type = estimator
+
+        estimator = estimator_type(self, data)
+        if not isinstance(estimator, BaseEstimator):
+            raise TypeError("Estimator object should be a valid pgmpy estimator")
+
+        estimator = estimator_type(self, data)
+        factors_list = estimator.get_parameters()
+        self.add_factors(*factors_list)
