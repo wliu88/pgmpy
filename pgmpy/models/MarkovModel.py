@@ -664,6 +664,11 @@ class MarkovModel(UndirectedGraph):
         if not isinstance(estimator, BaseEstimator):
             raise TypeError("Estimator object should be a valid pgmpy estimator")
 
+        if not self.nodes():
+            nodes, edges = estimator.get_model()
+            self.add_nodes_from(nodes)
+            self.add_edges_from(edges)
+
         estimator = estimator_type(self, data)
         factors_list = estimator.get_parameters()
         self.add_factors(*factors_list)

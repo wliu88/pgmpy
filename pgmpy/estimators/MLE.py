@@ -1,4 +1,4 @@
-from itertools import combinations
+from itertools import combinations, chain
 
 import numpy as np
 from scipy import stats
@@ -116,15 +116,26 @@ class MaximumLikelihoodEstimator(BaseEstimator):
             return factors
 
     def get_model(self, threshold=0.95):
-        nodes = self.data.columns
-        self.model.add_nodes_from(nodes)
-        edges = []
-        for u, v in combinations(nodes, 2):
-            f_exp = self.data.groupby([u, v]).size().values
-            u_f_obs = self.data.ix[:, u].value_counts().values
-            v_f_obs = self.data.ix[:, v].value_counts().values
-            if stats.chisquare(f_obs=[i * j for i in u_f_obs for j in v_f_obs], f_exp=f_exp).pvalue < threshold:
-                edges.append((u, v))
+        if isinstance(self.model, BayesianModel):
+            nodes = self.data.columns
+            self.model.add_nodes_from(nodes)
+            edges = []
+            for u, v in combinations(nodes, 2):
+                f_exp = self.data.groupby([u, v]).size().values
+                u_f_obs = self.data.ix[:, u].value_counts().values
+                v_f_obs = self.data.ix[:, v].value_counts().values
+                if stats.chisquare(f_obs=[i * j for i in u_f_obs for j in v_f_obs], f_exp=f_exp).pvalue < threshold:
+                    edges.append((u, v))
 
-        self.model.add_edges_from(edges)
-        return nodes, edges
+            self.model.add_edges_from(edges)
+            return nodes, edges
+
+        elif isinstance(self.model, MarkovModel):
+            nodes = self.data.columns
+            self.model.add_nodes_from(nodes)
+            all_possible_edges = list(combinations(nodes, 2))
+            optimum = 1000000
+            for edge_comb in chain(*[combinations(all_possible_edges, r) for r in range(1, len(all_possible_edges) + 1)]):
+                temp_model = MarkovModel(edge_comb)
+            # check with optimization function and choose the structure which gives
+            # the best results.
