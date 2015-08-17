@@ -2,6 +2,7 @@ from itertools import combinations
 
 import numpy as np
 from scipy import stats
+from scipy.optimize import minimize
 
 from pgmpy.estimators import BaseEstimator
 from pgmpy.factors import TabularCPD, Factor, factor_product
@@ -105,7 +106,14 @@ class MaximumLikelihoodEstimator(BaseEstimator):
                 Z = factor_product(*factors)
                 return Z - constants * params
 
+            final_params = minimize(optimize_fun)
+            factors = []
+            for index in range(len(edges)):
+                u, v = edges[index][0], edges[index][1]
+                factors.append(Factor([u, v], [self.node_card[u], self.node_card[v]],
+                                      final_params[param_cumsum[index]: param_cumsum[index + 1]]))
 
+            return factors
 
     def get_model(self, threshold=0.95):
         nodes = self.data.columns
