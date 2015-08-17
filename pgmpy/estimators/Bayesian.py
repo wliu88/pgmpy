@@ -137,8 +137,8 @@ class BayesianEstimator(BaseEstimator):
         return score
 
     def get_model(self, prior=None):
-        import pdb; pdb.set_trace()
         nodes = self.data.columns
+
         max_score = -1000000
         best_model = None
         all_possible_edges = list(combinations(nodes, 2))

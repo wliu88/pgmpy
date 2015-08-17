@@ -103,7 +103,7 @@ class MaximumLikelihoodEstimator(BaseEstimator):
                     u, v = edges[index][0], edges[index][1]
                     factors.append(Factor([u, v], [self.node_card[u], self.node_card[v]],
                                           params[param_cumsum[index]: param_cumsum[index + 1]]))
-                Z = sum(factor_product(*factors))
+                Z = sum(factor_product(*factors).values)
                 return Z - sum(constants * params)
 
             final_params = minimize(optimize_fun, x0=[1]*total_params).x
