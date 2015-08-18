@@ -143,8 +143,8 @@ class MaximumLikelihoodEstimator(BaseEstimator):
             optimum = 1000000
             optimal_edges = None
             for edge_comb in chain(*[combinations(all_possible_edges, r) for r in range(1, len(all_possible_edges) + 1)]):
-                temp_model = MarkovModel(edge_comb)
-                factors, score = self.get_parameters(temp_model, score=True)
+                self.model = MarkovModel(edge_comb)
+                factors, score = self.get_parameters(score=True)
                 if score < optimum:
                     optimum = score
                     optimal_edges = edge_comb
