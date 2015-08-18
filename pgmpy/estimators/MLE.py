@@ -38,7 +38,7 @@ class MaximumLikelihoodEstimator(BaseEstimator):
 
         super().__init__(model, data)
 
-    def get_parameters(self):
+    def get_parameters(self, **kwargs):
         """
         Method used to get parameters.
 
@@ -106,14 +106,20 @@ class MaximumLikelihoodEstimator(BaseEstimator):
                 Z = sum(factor_product(*factors).values)
                 return Z - sum(constants * params)
 
-            final_params = minimize(optimize_fun, x0=[1]*total_params).x
+            mini = minimize(optimize_fun, x0=[1]*total_params)
+            final_params = mini.x
+            score = mini.fun
+
             factors = []
             for index in range(len(edges)):
                 u, v = edges[index][0], edges[index][1]
                 factors.append(Factor([u, v], [self.node_card[u], self.node_card[v]],
                                       final_params[param_cumsum[index]: param_cumsum[index + 1]]))
 
-            return factors
+            if 'score' in kwargs and kwargs['score']:
+                return factors, score
+            else:
+                return factors
 
     def get_model(self, threshold=0.95):
         if isinstance(self.model, BayesianModel):
@@ -135,7 +141,14 @@ class MaximumLikelihoodEstimator(BaseEstimator):
             self.model.add_nodes_from(nodes)
             all_possible_edges = list(combinations(nodes, 2))
             optimum = 1000000
+            optimal_edges = None
             for edge_comb in chain(*[combinations(all_possible_edges, r) for r in range(1, len(all_possible_edges) + 1)]):
                 temp_model = MarkovModel(edge_comb)
+                factors, score = self.get_parameters(temp_model, score=True)
+                if score < optimum:
+                    optimum = score
+                    optimal_edges = edge_comb
+
+            return nodes, edge_comb
             # check with optimization function and choose the structure which gives
             # the best results.
