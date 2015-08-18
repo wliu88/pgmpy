@@ -91,8 +91,8 @@ class BayesianEstimator(BaseEstimator):
                     var_card = self.node_card[node]
                     state_counts = (self.data.groupby([node] + self.model.predecessors(node)).size()).values
                     node_alpha = np.array(alpha[node])
-
-                    values = (state_counts.values + node_alpha) / (state_counts.values.sum() + node_alpha.sum())
+                    
+                    values = (state_counts + node_alpha) / (state_counts.sum() + node_alpha.sum())
                     values = values.reshape(var_card, np.product(parent_card))
                     cpd = TabularCPD(node, var_card, values,
                                      evidence=parents,
