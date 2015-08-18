@@ -122,15 +122,16 @@ class BayesianEstimator(BaseEstimator):
         score = 0
         for node in model.nodes():
             parents = [u for u, v in model.edges() if v == node]
-            parents_card = [self._node_card[par] for par in parents]
+            parents_card = [self.node_card[par] for par in parents]
             outer_sum = 0
             for states in product(*[range(card) for card in parents_card]):
                 u_i = [(parents[i], states[i]) for i in range(len(parents))]
                 value = (lgamma(self._alpha(node, prior)) -
                          lgamma(self._alpha(node, prior) + self._count(u_i)))
                 node_sum = 0
-                for x_i in range(model.get_cardinality(node)):
-                    node_sum += (lgamma(self._alpha(node, prior, x_i) + self._count(states.append((node, x_i)))) -
+                for x_i in range(self.node_card[node]):
+                    u_i.append((node, x_i))
+                    node_sum += (lgamma(self._alpha(node, prior, x_i) + self._count(u_i)) -
                                  lgamma(self._alpha(node, prior, x_i)))
                 outer_sum += value * node_sum
             score += outer_sum
@@ -138,6 +139,13 @@ class BayesianEstimator(BaseEstimator):
 
     def get_model(self, prior=None):
         nodes = self.data.columns
+        for node in nodes:
+            self.node_card[node] = self.data.ix[:, node].unique().size
+
+        if not prior:
+            prior = {}
+            for node in nodes:
+                prior[node] = [1/self.node_card[node]] * self.node_card[node]
 
         max_score = -1000000
         best_model = None
