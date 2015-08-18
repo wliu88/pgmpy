@@ -138,6 +138,8 @@ class MaximumLikelihoodEstimator(BaseEstimator):
 
         elif isinstance(self.model, MarkovModel):
             nodes = self.data.columns
+            for node in nodes:
+                self.node_card[node] = self.data.ix[:, node].unique().size
             self.model.add_nodes_from(nodes)
             all_possible_edges = list(combinations(nodes, 2))
             optimum = 1000000
