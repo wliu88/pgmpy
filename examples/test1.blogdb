@@ -1,0 +1,3 @@
+isA(O4,Cup) = True
+atLocation(O4,Shelf) = True
+atLocation(O4,Kitchen)= True

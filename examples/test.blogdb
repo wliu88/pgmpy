@@ -1,0 +1,29 @@
+isA(O1,Cup)=True
+isA(O1,Bowl)=False
+atLocation(O1,Shelf)=True
+atLocation(O1,Kitchen)=True
+atLocation(O1,Bathroom)=True
+
+isA(O2,Cup)=True
+isA(O2,Bowl)=False
+atLocation(O2,Shelf)=True
+atLocation(O2,Kitchen)=True
+atLocation(O2,Bathroom)=True
+
+isA(O3,Cup)=True
+isA(O3,Bowl)=False
+atLocation(O3,Shelf)=True
+atLocation(O3,Kitchen)=True
+atLocation(O3,Bathroom)=True
+
+isA(O4,Cup) = True
+atLocation(O4,Shelf) = True
+atLocation(O4,Kitchen)= True
+
+
+isA(O5,Cup)=True
+atLocation(O5,Shelf)=True
+
+
+
+

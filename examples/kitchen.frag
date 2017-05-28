@@ -1,0 +1,22 @@
+// Priors
+IsA(x,Branching.n.01)
+IsA(x,Roll.n.15)
+IsA(x,Food.n.03)
+IsA(x,Plate.n.05)
+IsA(x,Pot.n.03)
+IsA(x,Scissors.n.02)
+IsA(x,Fruit.n.03)
+IsA(x,Mug.n.01)
+
+// Posteriors
+IsA(x,Roll.n.15) ~ IsA(x,Plate.n.05) -> AtLocation(x,Sink)
+IsA(x,Branching.n.01) ~ IsA(x,Mug.n.01) -> AtLocation(x,Bathroom)
+IsA(x,Branching.n.01) ~ IsA(x,Food.n.03) ~ IsA(x,Roll.n.15) ~ IsA(x,Plate.n.05) -> AtLocation(x,Table)
+IsA(x,Scissors.n.02) -> IsA(x,Control.n.05)
+IsA(x,Branching.n.01) -> IsA(x,Change_of_integrity.n.01)
+IsA(x,Containerful.n.01) -> IsA(x,Indefinite_quantity.n.01)
+IsA(x,Fruit.n.03) -> IsA(x,Ending.n.04)
+IsA(x,Roll.n.15) -> IsA(x,Propulsion.n.02)
+IsA(x,Mug.n.01) ~ IsA(x,Pot.n.03) ~ IsA(x,Plate.n.05) -> IsA(x,Containerful.n.01)
+IsA(x,Plate.n.05) -> AtLocation(x,Dog)
+IsA(x,Food.n.03) ~ IsA(x,Plate.n.05) -> AtLocation(x,Bedroom)

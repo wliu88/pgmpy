@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<PMML version="3.0" xmlns="http://www.dmg.org/PMML-3_0">
+	<DataDictionary>
+		<DataField name="IsA(x,Branching.n.01)" optype="categorical" id="0">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Roll.n.15)" optype="categorical" id="1">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Food.n.03)" optype="categorical" id="2">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Plate.n.05)" optype="categorical" id="3">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Pot.n.03)" optype="categorical" id="4">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Scissors.n.02)" optype="categorical" id="5">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Fruit.n.03)" optype="categorical" id="6">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Mug.n.01)" optype="categorical" id="7">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Table>0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="AtLocation(x,Sink)" optype="categorical" id="8">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>1</X-Given> <!-- IsA(x,Roll.n.15) -->
+					<X-Given>3</X-Given> <!-- IsA(x,Plate.n.05) -->
+					<X-Table>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="AtLocation(x,Bathroom)" optype="categorical" id="9">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>0</X-Given> <!-- IsA(x,Branching.n.01) -->
+					<X-Given>7</X-Given> <!-- IsA(x,Mug.n.01) -->
+					<X-Table>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="AtLocation(x,Table)" optype="categorical" id="10">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>0</X-Given> <!-- IsA(x,Branching.n.01) -->
+					<X-Given>2</X-Given> <!-- IsA(x,Food.n.03) -->
+					<X-Given>1</X-Given> <!-- IsA(x,Roll.n.15) -->
+					<X-Given>3</X-Given> <!-- IsA(x,Plate.n.05) -->
+					<X-Table>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Control.n.05)" optype="categorical" id="11">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>5</X-Given> <!-- IsA(x,Scissors.n.02) -->
+					<X-Table>0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Change_of_integrity.n.01)" optype="categorical" id="12">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>0</X-Given> <!-- IsA(x,Branching.n.01) -->
+					<X-Table>0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Indefinite_quantity.n.01)" optype="categorical" id="13">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>14</X-Given> <!-- IsA(x,Containerful.n.01) -->
+					<X-Table>0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Ending.n.04)" optype="categorical" id="15">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>6</X-Given> <!-- IsA(x,Fruit.n.03) -->
+					<X-Table>0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Propulsion.n.02)" optype="categorical" id="16">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>1</X-Given> <!-- IsA(x,Roll.n.15) -->
+					<X-Table>0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="IsA(x,Containerful.n.01)" optype="categorical" id="14">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>7</X-Given> <!-- IsA(x,Mug.n.01) -->
+					<X-Given>4</X-Given> <!-- IsA(x,Pot.n.03) -->
+					<X-Given>3</X-Given> <!-- IsA(x,Plate.n.05) -->
+					<X-Table>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="AtLocation(x,Dog)" optype="categorical" id="17">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>3</X-Given> <!-- IsA(x,Plate.n.05) -->
+					<X-Table>0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+		<DataField name="AtLocation(x,Bedroom)" optype="categorical" id="18">
+			<Extension>
+				<X-NodeType>chance</X-NodeType>
+				<X-Definition>
+					<X-Given>2</X-Given> <!-- IsA(x,Food.n.03) -->
+					<X-Given>3</X-Given> <!-- IsA(x,Plate.n.05) -->
+					<X-Table>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 </X-Table>
+				</X-Definition>
+			</Extension>
+			<Value value="True" />
+			<Value value="False" />
+		</DataField>
+	</DataDictionary>
+</PMML>
